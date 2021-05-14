@@ -4,6 +4,11 @@ class Api::V1::MerchantsController < ApplicationController
     render json: MerchantSerializer.new(merchants), status: 200
   end
 
+  def show
+    merchant = Merchant.find(params[:id])
+    render json: MerchantSerializer.new(merchant), status: 200
+  end
+
   def create
     merchant = Merchant.create(merchant_params)
     render json: MerchantSerializer.new(merchant), status: 201
@@ -17,7 +22,7 @@ class Api::V1::MerchantsController < ApplicationController
     rescue
       error = ActiveRecord::RecordNotFound
       render json: {error: error.to_s}, status: :not_found
-    end 
+    end
   end
 
   def destroy

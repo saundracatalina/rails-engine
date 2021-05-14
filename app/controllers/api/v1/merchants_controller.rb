@@ -10,9 +10,14 @@ class Api::V1::MerchantsController < ApplicationController
   end
 
   def update
-    merchant = Merchant.find(params[:id])
-    merchant.update(name: params[:name])
-    render json: MerchantSerializer.new(merchant), status: 202
+    begin
+      merchant = Merchant.find(params[:id])
+      merchant.update(name: params[:name])
+      render json: MerchantSerializer.new(merchant), status: 202
+    rescue
+      error = ActiveRecord::RecordNotFound
+      render json: {error: error.to_s}, status: :not_found
+    end 
   end
 
   def destroy
